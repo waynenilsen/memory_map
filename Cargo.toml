@@ -1,7 +1,13 @@
 [package]
-name = "mmap"
+name = "memory_map"
 version = "0.0.1"
-authors = ["Dan Burkert <dan@danburkert.com>"]
+authors = ["MaidSafe Developers <dev@maidsafe.net>"]
+description = "Memory mapped files."
+documentation = "http://maidsafe.net/memory_map/latest"
+repository = "https://github.com/maidsafe/memory_map"
+readme = "README.md"
+license = "GPL-3.0"
+homepage = "http://maidsafe.net"
 
 [dependencies]
 bitflags = "*"

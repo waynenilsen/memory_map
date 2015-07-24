@@ -1,4 +1,4 @@
-extern crate mmap;
+extern crate memory_map as mmap;
 
 use std::env;
 use std::io::{self, Write};
