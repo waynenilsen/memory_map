@@ -74,17 +74,18 @@ impl Protection {
 /// flushed, or it is dropped.
 ///
 /// ```
+/// #[allow(dead_code)]
 /// use std::io::Write;
-/// use mmap::{Mmap, Protection};
+/// use memory_map::{Mmap, Protection};
 ///
 /// let file_mmap = Mmap::open("README.md", Protection::Read).unwrap();
-/// let bytes: &[u8] = &*file_mmap;
-/// assert_eq!(b"# mmap", &file_mmap[0..6]);
+/// assert_eq!(b"# Memory Map", &file_mmap[0..12]);
 ///
 /// let mut anon_mmap = Mmap::anonymous(4096, Protection::ReadWrite).unwrap();
 /// (&mut *anon_mmap).write(b"foo").unwrap();
 /// assert_eq!(b"foo\0\0", &anon_mmap[0..5]);
 /// ```
+
 pub struct Mmap {
     inner: MmapInner
 }
