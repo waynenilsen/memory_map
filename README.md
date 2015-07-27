@@ -9,7 +9,7 @@ Cross-platform Rust API for memory-mapped file IO.
 |:------:|:-------:|:-------:|:-------:|:-------:|
 |[![Build Status](https://travis-ci.org/maidsafe/memory_map.svg?branch=master)](https://travis-ci.org/maidsafe/memory_map)|[![Build status](https://ci.appveyor.com/api/projects/status/8dc616koi5oarjq2?svg=true)](https://ci.appveyor.com/project/dirvine/memory-map)|[![Coverage Status](https://coveralls.io/repos/maidsafe/memory_map/badge.svg)](https://coveralls.io/r/maidsafe/memory_map)|[![Stories in Ready](https://badge.waffle.io/maidsafe/memory_map.png?label=ready&title=Ready)](https://waffle.io/maidsafe/memory_map)
 
-| >[API Documentation - master branch](http:://maidsafe.net/memory_map/master) | [SAFE Network System Documention](http://systemdocs.maidsafe.net) | [MaidSafe website](http://maidsafe.net) | [Safe Community site](https://forum.safenetwork.io) |
+| [API Documentation - master branch](http:://maidsafe.net/memory_map/master) | [SAFE Network System Documention](http://systemdocs.maidsafe.net) | [MaidSafe website](http://maidsafe.net) | [Safe Community site](https://forum.safenetwork.io) |
 |:------:|:-------:|:-------:|:-------:|
 
 ## Features
