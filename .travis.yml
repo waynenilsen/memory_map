@@ -11,9 +11,6 @@ branches:
   only:
       - master
       - gh-pages
-script:
-- cargo build --verbose
-- cargo test --verbose
 after_success: |
   if  [[ $TRAVIS_BRANCH = master ]] && [[ $TRAVIS_PULL_REQUEST = false ]]; then
     cargo doc &&
