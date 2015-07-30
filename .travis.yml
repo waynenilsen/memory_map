@@ -15,5 +15,6 @@ env:
   global:
     secure: cOLbJ7YgCw+SIfl0GZ+8dbhqKH12Fo0atTuOcOCUfULXDGx1T9uakFu+yEWUg05U+Tx/e9sKsvpOd7rFT67GB8nAMyNbtWwmpOMY5LUavg2QrF/yIqltNj4+J0MPAt+gde3IXNffnBG4hZNdIG3yjhr+rkfiXCL7S6TLyUzZhkE=
 after_success:
-- curl -sSL https://github.com/maidsafe/QA/raw/master/Bash%20Scripts/Travis/deploy_gh-pages.sh | bash
+  sudo: true
+    - curl -sSL https://github.com/maidsafe/QA/raw/master/Bash%20Scripts/Travis/deploy_gh-pages.sh | bash
 
