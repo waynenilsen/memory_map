@@ -319,6 +319,8 @@ mod test {
         let zeros = iter::repeat(0).take(len).collect::<Vec<_>>();
         // add more values than the mapping can handle
         let incr = (0..len + 1).map(|n| n as u8).collect::<Vec<_>>();
+        // expected values written
+        let expected = (0..len).map(|n| n as u8).collect::<Vec<_>>();
 
         // check that the mmap is empty
         assert_eq!(&zeros[..], &*mmap);
@@ -328,6 +330,9 @@ mod test {
             Ok(()) => panic!("write to mapping succeeded."),
             Err(error) => assert_eq!(error.description(), "failed to write whole buffer"),
         }
+
+        // read values back
+        assert_eq!(&expected[..], &*mmap);
     }
 
     #[test]
