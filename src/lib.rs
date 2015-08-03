@@ -240,6 +240,7 @@ mod test {
 
     use std::{fs, iter};
     use std::io::{Read, Write};
+    use std::error::Error;
     use std::thread;
 
     use super::*;
@@ -309,6 +310,32 @@ mod test {
     }
 
     #[test]
+    fn anonymous_overflow() {
+        let expected_len = 128;
+        let mut mmap = Mmap::anonymous(expected_len, Protection::ReadWrite).unwrap();
+        let len = mmap.len();
+        assert_eq!(expected_len, len);
+
+        let zeros = iter::repeat(0).take(len).collect::<Vec<_>>();
+        // add more values than the mapping can handle
+        let incr = (0..len + 1).map(|n| n as u8).collect::<Vec<_>>();
+        // expected values written
+        let expected = (0..len).map(|n| n as u8).collect::<Vec<_>>();
+
+        // check that the mmap is empty
+        assert_eq!(&zeros[..], &*mmap);
+
+        // try to write values into the mmap
+        match mmap.as_mut().write_all(&incr[..]) {
+            Ok(()) => panic!("write to mapping succeeded."),
+            Err(error) => assert_eq!(error.description(), "failed to write whole buffer"),
+        }
+
+        // read values back
+        assert_eq!(&expected[..], &*mmap);
+    }
+
+    #[test]
     fn file_write() {
         let tempdir = tempdir::TempDir::new("mmap").unwrap();
         let path = tempdir.path().join("mmap");
@@ -330,6 +357,37 @@ mod test {
         file.read(&mut read).unwrap();
         assert_eq!(write, &read);
     }
+
+    #[test]
+    fn file_overflow() {
+        const EXPECTED_LENGTH: usize = 128;
+        let tempdir = tempdir::TempDir::new("mmap").unwrap();
+        let path = tempdir.path().join("mmap");
+
+        let mut file = fs::OpenOptions::new()
+                                       .read(true)
+                                       .write(true)
+                                       .create(true)
+                                       .open(&path).unwrap();
+        file.set_len(EXPECTED_LENGTH as u64).unwrap();
+
+        let incr = (0..EXPECTED_LENGTH + 1).map(|n| n as u8).collect::<Vec<_>>();
+        let expected = (0..EXPECTED_LENGTH).map(|n| n as u8).collect::<Vec<_>>();
+
+        let mut mmap = Mmap::open(&path, Protection::ReadWrite).unwrap();
+
+        match (&mut mmap[..]).write(&incr[..]) {
+            Ok(size) => assert_eq!(EXPECTED_LENGTH, size),
+            Err(_) => panic!("write to mapping failed."),
+        }
+
+        mmap.flush().unwrap();
+
+        let mut read = [0u8; EXPECTED_LENGTH];
+        file.read(&mut read).unwrap();
+        assert_eq!(expected, read.to_vec());
+    }
+
 
     #[test]
     fn map_copy() {
