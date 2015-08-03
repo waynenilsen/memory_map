@@ -240,6 +240,7 @@ mod test {
 
     use std::{fs, iter};
     use std::io::{Read, Write};
+    use std::error::Error;
     use std::thread;
 
     use super::*;
@@ -306,6 +307,27 @@ mod test {
 
         // read values back
         assert_eq!(&incr[..], &*mmap);
+    }
+
+    #[test]
+    fn overflow() {
+        let expected_len = 128;
+        let mut mmap = Mmap::anonymous(expected_len, Protection::ReadWrite).unwrap();
+        let len = mmap.len();
+        assert_eq!(expected_len, len);
+
+        let zeros = iter::repeat(0).take(len).collect::<Vec<_>>();
+        // add more values than the mapping can handle
+        let incr = (0..len + 1).map(|n| n as u8).collect::<Vec<_>>();
+
+        // check that the mmap is empty
+        assert_eq!(&zeros[..], &*mmap);
+
+        // try to write values into the mmap
+        match mmap.as_mut().write_all(&incr[..]) {
+            Ok(()) => panic!("write to mapping succeeded."),
+            Err(error) => assert_eq!(error.description(), "failed to write whole buffer"),
+        }
     }
 
     #[test]
