@@ -310,7 +310,7 @@ mod test {
     }
 
     #[test]
-    fn overflow() {
+    fn anonymous_overflow() {
         let expected_len = 128;
         let mut mmap = Mmap::anonymous(expected_len, Protection::ReadWrite).unwrap();
         let len = mmap.len();
@@ -357,6 +357,37 @@ mod test {
         file.read(&mut read).unwrap();
         assert_eq!(write, &read);
     }
+
+    #[test]
+    fn file_overflow() {
+        const EXPECTED_LENGTH: usize = 128;
+        let tempdir = tempdir::TempDir::new("mmap").unwrap();
+        let path = tempdir.path().join("mmap");
+
+        let mut file = fs::OpenOptions::new()
+                                       .read(true)
+                                       .write(true)
+                                       .create(true)
+                                       .open(&path).unwrap();
+        file.set_len(EXPECTED_LENGTH as u64).unwrap();
+
+        let incr = (0..EXPECTED_LENGTH + 1).map(|n| n as u8).collect::<Vec<_>>();
+        let expected = (0..EXPECTED_LENGTH).map(|n| n as u8).collect::<Vec<_>>();
+
+        let mut mmap = Mmap::open(&path, Protection::ReadWrite).unwrap();
+
+        match (&mut mmap[..]).write(&incr[..]) {
+            Ok(size) => assert_eq!(EXPECTED_LENGTH, size),
+            Err(_) => panic!("write to mapping failed."),
+        }
+
+        mmap.flush().unwrap();
+
+        let mut read = [0u8; EXPECTED_LENGTH];
+        file.read(&mut read).unwrap();
+        assert_eq!(expected, read.to_vec());
+    }
+
 
     #[test]
     fn map_copy() {
