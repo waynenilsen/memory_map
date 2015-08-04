@@ -1,27 +1,25 @@
-platform:
-  - x64
-environment:
-  RUST_INSTALL_DIR: C:\Rust
-  matrix:
-    - RUST_INSTALL_TRIPLE: x86_64-pc-windows-gnu
-
 install:
-  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-nightly-$Env:RUST_INSTALL_TRIPLE.exe"
-  - cmd: rust-nightly-%RUST_INSTALL_TRIPLE%.exe /VERYSILENT /NORESTART /COMPONENTS="rust,gcc,cargo" /DIR="%RUST_INSTALL_DIR%"
-  - cmd: SET PATH=%PATH%;%RUST_INSTALL_DIR%\bin;
-  - rustc --version
-  - ps: if($env:RUST_INSTALL_TRIPLE -eq 'x86_64-pc-windows-gnu') {
-         Start-FileDownload "http://libgd.blob.core.windows.net/mingw/mingw-w64-dgn-x86_64-20141001.7z";
-          7z x -oC:\ mingw-w64-dgn-x86_64-20141001.7z;
-       }
-  - ps: if($env:RUST_INSTALL_TRIPLE -eq 'i686-pc-windows-gnu') {
-          Start-FileDownload "https://gitlab.com/Fraser999/Dependencies/raw/master/bin/i686-pc-windows-gnu/libsodium.a";
-        }
-  - if "%RUST_INSTALL_TRIPLE%" == "i686-pc-windows-gnu" SET PATH=%PATH%;C:\MinGW\bin;
-  - if "%RUST_INSTALL_TRIPLE%" == "x86_64-pc-windows-gnu" SET PATH=%PATH%;C:\mingw64\bin;
+  - ps: Start-FileDownload "https://raw.githubusercontent.com/carllerche/travis-rust-matrix/master/install.ps1"; . .\install.ps1
+
+platform:
+  - x86
+  - x64
+
+configuration:
+  - Debug
+  - Release
+
+environment:
+  matrix:
+    - RUST_VERSION: 1.1.0
+    - RUST_VERSION: beta
+    - RUST_VERSION: nightly
 
 build: false
 
 test_script:
-  - cargo build --verbose
+  - ps: if ($env:CONFIGURATION -eq "Release") {
+          $env:config_flags = "--release"
+        }
+  - cargo build --verbose %config_flags%
   - cargo test --verbose
