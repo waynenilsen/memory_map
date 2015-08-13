@@ -1,7 +1,7 @@
 [package]
 name = "memory_map"
-version = "0.0.2"
-authors = ["Dan Burkert <dan@danburkert.com>", "MaidSafe Developers <dev@maidsafe.net>"]
+version = "0.0.1"
+authors = ["MaidSafe Developers <dev@maidsafe.net>"]
 description = "Memory mapped files."
 documentation = "http://maidsafe.net/memory_map/latest"
 repository = "https://github.com/maidsafe/memory_map"
