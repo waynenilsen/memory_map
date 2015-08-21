@@ -53,8 +53,7 @@ impl MmapInner {
             if handle == ptr::null_mut() {
                 return Err(io::Error::last_os_error());
             }
-
-            let ptr = kernel32::MapViewOfFile(handle, prot.as_view_flag(), 0, 0, len);
+            let ptr = kernel32::MapViewOfFile(handle, prot.as_view_flag(), 0, 0, len as winapi::SIZE_T);
             let _ = kernel32::CloseHandle(handle);
 
             if ptr == ptr::null_mut() {
