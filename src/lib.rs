@@ -10,9 +10,9 @@
         unused, unused_allocation, unused_attributes, unused_comparisons, unused_features,
         unused_parens, while_true)]
 #![warn(trivial_casts, trivial_numeric_casts, unused_extern_crates, unused_import_braces,
-        unused_results, unused_qualifications, variant_size_differences)]
+        unused_qualifications, unused_results, variant_size_differences)]
 
-#![allow(unsafe_code, unused_qualifications)]
+#![allow(unsafe_code, unused_qualifications, trivial_casts, trivial_numeric_casts)]
 
 #[cfg(target_os = "windows")]
 mod windows;
