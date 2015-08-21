@@ -1,7 +1,18 @@
 //! A cross-platform Rust API for memory-mapped file IO.
 
-#[macro_use]
-extern crate bitflags;
+#![doc(html_logo_url = "http://maidsafe.net/img/Resources/branding/maidsafe_logo.fab2.png",
+       html_favicon_url = "http://maidsafe.net/img/favicon.ico",
+       html_root_url = "http://maidsafe.net/memory_map/memory_map/index.html")]
+#![forbid(missing_docs, warnings)]
+#![deny(bad_style, deprecated, drop_with_repr_extern, improper_ctypes, non_shorthand_field_patterns,
+        overflowing_literals, plugin_as_library, private_no_mangle_fns, private_no_mangle_statics,
+        raw_pointer_derive, stable_features, unconditional_recursion, unknown_lints, unsafe_code,
+        unused, unused_allocation, unused_attributes, unused_comparisons, unused_features,
+        unused_parens, while_true)]
+#![warn(trivial_casts, trivial_numeric_casts, unused_extern_crates, unused_import_braces,
+        unused_results, unused_qualifications, variant_size_differences)]
+
+#![allow(unsafe_code, unused_qualifications)]
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -48,8 +59,8 @@ impl Protection {
 
     fn as_open_options(self) -> fs::OpenOptions {
         let mut options = fs::OpenOptions::new();
-        options.read(true)
-               .write(self.write());
+        let _ = options.read(true)
+                       .write(self.write());
 
         options
     }
@@ -280,10 +291,10 @@ mod test {
         let tempdir = tempdir::TempDir::new("mmap").unwrap();
         let path = tempdir.path().join("mmap");
 
-        fs::OpenOptions::new()
-                        .write(true)
-                        .create(true)
-                        .open(&path).unwrap();
+        let _ = fs::OpenOptions::new()
+                    .write(true)
+                    .create(true)
+                    .open(&path).unwrap();
 
         assert!(Mmap::open(path, Protection::ReadWrite).is_err());
     }
@@ -351,10 +362,10 @@ mod test {
         let mut read = [0u8; 6];
 
         let mut mmap = Mmap::open(&path, Protection::ReadWrite).unwrap();
-        (&mut mmap[..]).write(write).unwrap();
+        let _ = (&mut mmap[..]).write(write).unwrap();
         mmap.flush().unwrap();
 
-        file.read(&mut read).unwrap();
+        let _ = file.read(&mut read).unwrap();
         assert_eq!(write, &read);
     }
 
@@ -384,7 +395,7 @@ mod test {
         mmap.flush().unwrap();
 
         let mut read = [0u8; EXPECTED_LENGTH];
-        file.read(&mut read).unwrap();
+        let _ = file.read(&mut read).unwrap();
         assert_eq!(expected, read.to_vec());
     }
 
@@ -406,20 +417,20 @@ mod test {
         let mut read = [0u8; 6];
 
         let mut mmap = Mmap::open(&path, Protection::ReadCopy).unwrap();
-        (&mut mmap[..]).write(write).unwrap();
+        let _ = (&mut mmap[..]).write(write).unwrap();
         mmap.flush().unwrap();
 
         // The mmap contains the write
-        (&*mmap).read(&mut read).unwrap();
+        let _ = (&*mmap).read(&mut read).unwrap();
         assert_eq!(write, &read);
 
         // The file does not contain the write
-        file.read(&mut read).unwrap();
+        let _ = file.read(&mut read).unwrap();
         assert_eq!(nulls, &read);
 
         // another mmap does not contain the write
         let mmap2 = Mmap::open(&path, Protection::Read).unwrap();
-        (&*mmap2).read(&mut read).unwrap();
+        let _ = (&*mmap2).read(&mut read).unwrap();
         assert_eq!(nulls, &read);
     }
 
@@ -433,8 +444,8 @@ mod test {
     #[test]
     fn send() {
         let mut mmap = Mmap::anonymous(128, Protection::ReadWrite).unwrap();
-        (&mut mmap[..]).write(b"foobar").unwrap();
-        thread::spawn(move || {
+        let _ = (&mut mmap[..]).write(b"foobar").unwrap();
+        let _ = thread::spawn(move || {
             mmap.flush().unwrap();
         });
     }

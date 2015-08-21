@@ -40,7 +40,7 @@ impl MmapInner {
 
         let ptr = unsafe {
             libc::mmap(ptr::null_mut(),
-                       len as libc::size_t,
+                       len,
                        prot.as_prot(),
                        prot.as_flag(),
                        std::os::unix::io::AsRawFd::as_raw_fd(&file),
@@ -73,7 +73,7 @@ impl MmapInner {
         } else {
             Ok(MmapInner {
                 ptr: ptr,
-                len: len as usize,
+                len: len,
             })
         }
     }

@@ -44,7 +44,7 @@ impl MmapInner {
         let len = try!(file.metadata()).len();
 
         unsafe {
-            let handle = kernel32::CreateFileMappingW(AsRawHandle::as_raw_handle(&file) as *mut c_void,
+            let handle = kernel32::CreateFileMappingW(AsRawHandle::as_raw_handle(&file),
                                                       ptr::null_mut(),
                                                       prot.as_mapping_flag(),
                                                       0,
@@ -54,8 +54,8 @@ impl MmapInner {
                 return Err(io::Error::last_os_error());
             }
 
-            let ptr = kernel32::MapViewOfFile(handle, prot.as_view_flag(), 0, 0, len as winapi::SIZE_T);
-            kernel32::CloseHandle(handle);
+            let ptr = kernel32::MapViewOfFile(handle, prot.as_view_flag(), 0, 0, len);
+            let _ = kernel32::CloseHandle(handle);
 
             if ptr == ptr::null_mut() {
                 Err(io::Error::last_os_error())
@@ -81,7 +81,7 @@ impl MmapInner {
                 return Err(io::Error::last_os_error());
             }
             let ptr = kernel32::MapViewOfFile(handle, prot.as_view_flag(), 0, 0, len as winapi::SIZE_T);
-            kernel32::CloseHandle(handle);
+            let _ = kernel32::CloseHandle(handle);
 
             if ptr == ptr::null_mut() {
                 Err(io::Error::last_os_error())
@@ -89,7 +89,7 @@ impl MmapInner {
                 Ok(MmapInner {
                     file: None,
                     ptr: ptr,
-                    len: len as usize,
+                    len: len,
                 })
             }
         }
