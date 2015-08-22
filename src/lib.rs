@@ -12,8 +12,6 @@
 #![warn(trivial_casts, trivial_numeric_casts, unused_extern_crates, unused_import_braces,
         unused_qualifications, unused_results, variant_size_differences)]
 
-#![allow(unsafe_code, unused_qualifications, trivial_casts, trivial_numeric_casts)]
-
 #[cfg(target_os = "windows")]
 mod windows;
 #[cfg(target_os = "windows")]
@@ -32,8 +30,6 @@ use std::ops::{
     Range, RangeFrom, RangeTo, RangeFull,
 };
 use std::path::Path;
-
-use Protection::*;
 
 /// Memory map protection.
 ///
@@ -67,6 +63,7 @@ impl Protection {
 
     /// Returns `true` if the `Protection` is writable.
     pub fn write(self) -> bool {
+        use Protection::*;
         match self {
             ReadWrite | ReadCopy => true,
             _ => false,

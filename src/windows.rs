@@ -1,3 +1,5 @@
+#![allow(unsafe_code)]
+
 extern crate kernel32;
 extern crate winapi;
 
@@ -38,6 +40,7 @@ pub struct MmapInner {
 
 impl MmapInner {
 
+    #[allow(trivial_numeric_casts)]
     pub fn open<P>(path: P, prot: Protection) -> io::Result<MmapInner>
     where P: AsRef<Path> {
         let file = try!(prot.as_open_options().open(path));
