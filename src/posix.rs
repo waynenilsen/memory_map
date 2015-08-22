@@ -1,3 +1,5 @@
+#![allow(unsafe_code)]
+
 extern crate libc;
 
 use std::{self, io, ptr, slice};
