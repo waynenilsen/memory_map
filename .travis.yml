@@ -1,6 +1,7 @@
 env:
   global:
-    secure: jlbj8bEOKtVE7EXb29KFWjF3H7Vyoqrf27x7MPt6+WmQZgP6HWZRcjFDX3tb6b2W9KQokjuSmbaol83NEcPDL6JmemBD7gGAHxGt+Wpypo/DO2XqdoRRo5tg37ho+hpL6+TiWAEIl2OOAHEOfwuKVIjVVZ0Xr8cVo6afFKUPB03Iu7KEBgZnNgA4/Lznt1vykS5LOGM3L1zABIqj1eR2+sBnPFMscRsR684mK0YakEvv53PYDmvTo1WZ2FDJVULzrQx4FIVBDrtXphWQfymBNcAY99XPI1hjbh9xB7OQzhdTzs6hyX7JwIe4qqAYqsZgbw2Ficl4uAQDmyE1wUBamFo3q0dQ7YHXg0DWiqCUacwfQ9PySsdJg6Rk7OisIFzlMzLQm+wKQOk7/MrM4O23VngcTRh96jUfcTGGtzarQo8fDEbmTjWhwMdPl+GrbR66wUQV7LRj8htA/NxISdj9nLZRaSCMZMEqfX738/Ds2zw75Zd0aJFiF/69l0Dr3hiyuBOV5vmBneIZcCMq5qGErlX8BolFEhDcAaNLd+H86/9ASZn4BsKK5bMu9DcV9L9wGQnZpRloTHMzqT+fmu2DfNv4pnfYZmsWPpRvMnfq5ghqaohtPd0S1Nu4pS6eB1egpru9yypdPOP1MHCKOCE8mVXlpb6QrrKrA5r/b934XsM=
+    - secure: jlbj8bEOKtVE7EXb29KFWjF3H7Vyoqrf27x7MPt6+WmQZgP6HWZRcjFDX3tb6b2W9KQokjuSmbaol83NEcPDL6JmemBD7gGAHxGt+Wpypo/DO2XqdoRRo5tg37ho+hpL6+TiWAEIl2OOAHEOfwuKVIjVVZ0Xr8cVo6afFKUPB03Iu7KEBgZnNgA4/Lznt1vykS5LOGM3L1zABIqj1eR2+sBnPFMscRsR684mK0YakEvv53PYDmvTo1WZ2FDJVULzrQx4FIVBDrtXphWQfymBNcAY99XPI1hjbh9xB7OQzhdTzs6hyX7JwIe4qqAYqsZgbw2Ficl4uAQDmyE1wUBamFo3q0dQ7YHXg0DWiqCUacwfQ9PySsdJg6Rk7OisIFzlMzLQm+wKQOk7/MrM4O23VngcTRh96jUfcTGGtzarQo8fDEbmTjWhwMdPl+GrbR66wUQV7LRj8htA/NxISdj9nLZRaSCMZMEqfX738/Ds2zw75Zd0aJFiF/69l0Dr3hiyuBOV5vmBneIZcCMq5qGErlX8BolFEhDcAaNLd+H86/9ASZn4BsKK5bMu9DcV9L9wGQnZpRloTHMzqT+fmu2DfNv4pnfYZmsWPpRvMnfq5ghqaohtPd0S1Nu4pS6eB1egpru9yypdPOP1MHCKOCE8mVXlpb6QrrKrA5r/b934XsM=
+    - ElfUtilsVersion=0.163
 os:
   - linux
   - osx
@@ -13,7 +14,10 @@ sudo: false
 branches:
   only:
     - master
+cache:
+  directories:
+    - $HOME/elfutils-$ElfUtilsVersion
 script:
   - curl -sSL https://github.com/maidsafe/QA/raw/master/Bash%20Scripts/Travis/build_and_run_tests.sh | bash
 after_success:
-  - curl -sSL https://github.com/maidsafe/QA/raw/master/Bash%20Scripts/Travis/deploy_gh-pages.sh | bash
+  - curl -sSL https://github.com/maidsafe/QA/raw/master/Bash%20Scripts/Travis/after_success.sh | bash
