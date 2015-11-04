@@ -1,7 +1,6 @@
 env:
   global:
     - secure: RXGYW42jKnjHCzoQJfBdltX2UUSkwwH43dy4YvoY7qgO7/SLEkTLqJKQonlkogaB96lIZ6so+bX/5g9kY0VjKnBydFH+yHHi/dJY0kl9dZzJJvgGOhTQXBUx/o6QbFoHJ/U90BefQHwomXFh5i+Kg9xJnSQ+11E3r7JP6wM8oL2Q7DT5jOnKi71GpBvf/LhsaoblxStZeL/HjTa8R6ZlHGjIBX87QIur3X3EASsD6udGOy2JQJhVf78+Q7+kzYrFzbCjWUe/CyuauOFKX23Uo62UWRZANPcZu104PcWspk1/szjEayKCK6J4EfhAZHhMlvgdzVxSPWHrHZ+Knixm+CjSs75OxsVa0V8mnzWFPU+g7VymFhSCG5MgjTmAWcXBuHv9Vu34Vtj7Clcxc40nlZNU5DsTRe+UUXot6kafmrKzRWHJAlMzk9v0kkpp3dTIMKlDs+JskLY6kfSbTX83bC+VtGSpKDoaoqXYrC0bWSeyIpm5mr4M5aJbZEfKW55K06NRGepWk8WajGwnQXOc/ipZdYMej3JGqM13FYO/OKjdih7lg9kPTmvZ99aLvtURsXBN8Tz7e/gciGaHdnnBj51d46QKyefuleClJCd5+r8nP9Ly9UXqfD3Ek+Z8lS+oif+0mSoybcRtgwV3jNn3Qz54oz5TkafDyoV/HG/tC/E=
-    - ElfUtilsVersion=0.163
 os:
   - linux
   - osx
@@ -16,7 +15,7 @@ branches:
     - master
 cache:
   directories:
-    - $HOME/elfutils-$ElfUtilsVersion
+    - $HOME/elfutils
 script:
   - curl -sSL https://github.com/maidsafe/QA/raw/master/Bash%20Scripts/Travis/build_and_run_tests.sh | bash
 after_success:
